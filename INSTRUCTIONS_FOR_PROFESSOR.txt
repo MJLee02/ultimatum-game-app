@@ -1,0 +1,174 @@
+===============================================================================
+ULTIMATUM GAME APPLICATION - INSTRUCTIONS FOR PROFESSOR
+===============================================================================
+
+Dear Professor,
+
+Thank you for reviewing our Ultimatum Game application for ECON 4310. This 
+application implements a multi-round, multiplayer ultimatum game designed to 
+study behavioral assimilation in social preferences among immigrant populations.
+
+===============================================================================
+GITHUB REPOSITORY
+===============================================================================
+
+Full source code, documentation, and setup instructions are available at:
+https://github.com/MJLee02/ultimatum-game-app
+
+The repository includes:
+- Complete application source code
+- Database schema and migration scripts
+- Setup guide for replication
+- Deployment instructions
+- MIT License for open source use
+
+===============================================================================
+HOW TO ACCESS THE GAME
+===============================================================================
+
+[LIVE DEPLOYMENT LINK WILL BE HERE - check GitHub for latest deployment URL]
+
+Or run locally by following the setup instructions in SETUP_GUIDE.md
+
+===============================================================================
+HOW THE GAME WORKS
+===============================================================================
+
+GAME STRUCTURE:
+1. Players join a multiplayer lobby automatically upon opening the app
+2. When at least 2 players are present (must be even number), any player can 
+   start the game
+3. Players complete 10 rounds of the ultimatum game
+4. Each player is randomly assigned as proposer in 5 rounds and responder in 
+   5 rounds
+5. Players are randomly matched with different opponents each round
+6. After 10 rounds, players complete a demographic survey focused on migration 
+   history
+7. Results show total points earned and final dollar winnings
+
+GAMEPLAY MECHANICS:
+- Proposers split 40 points between themselves and a responder
+- Responders can accept or reject the offer
+- If accepted: both players receive their respective shares
+- If rejected: both players receive 0 points for that round
+- Players do NOT see who they are matched with (anonymous)
+- Players do NOT see results from previous rounds during gameplay
+- Total points ÷ 10 = final dollar earnings
+
+===============================================================================
+HOW TO TEST THE GAME (Multiplayer Experience)
+===============================================================================
+
+To experience the full multiplayer game, you will need at least 2 devices or 
+browser tabs:
+
+OPTION 1: Single Device Testing
+1. Open the game URL in 2 or more browser tabs
+2. Each tab represents a different player
+3. Wait for all players to join the lobby
+4. Click "Start Game" when you have an even number of players (2, 4, 6, etc.)
+5. Switch between tabs to play as different players
+6. Complete all 10 rounds in each tab
+7. Fill out demographic survey in each tab
+
+OPTION 2: Multiple Device Testing
+1. Share the game URL with colleagues or use multiple devices
+2. Each device represents a different player
+3. All players will see each other join the lobby in real-time
+4. Any player can start the game when there's an even number
+5. Play through the game simultaneously on different devices
+
+===============================================================================
+DEMOGRAPHIC DATA COLLECTED
+===============================================================================
+
+After gameplay, the app collects the following demographic information:
+- Date of Birth
+- Country of Birth
+- Current Country of Residence
+- Generation Status (0 = first generation immigrant, 1 = second generation, etc.)
+- Countries Lived In (with start and end dates)
+
+This data enables analysis of behavioral patterns based on migration history 
+and generational status.
+
+===============================================================================
+DATA ACCESS
+===============================================================================
+
+All game data is stored in a Supabase database. To access the data:
+
+1. Log into the Supabase project (credentials provided separately if needed)
+2. Navigate to Table Editor
+3. View the following tables:
+   - games: All game sessions
+   - game_players: Player participation
+   - player_roles: Role assignments per round
+   - rounds: Proposals, decisions, and payouts
+   - demographics: Participant demographic information
+4. Export data as CSV or JSON for analysis
+
+Sample SQL queries are available in the repository documentation.
+
+===============================================================================
+KEY FEATURES FOR RESEARCH VALIDITY
+===============================================================================
+
+✓ Random role assignment to prevent order effects
+✓ Anonymous matching to reduce reputation effects
+✓ Multiple rounds to capture behavioral patterns
+✓ Real-time multiplayer synchronization
+✓ Migration history collection for assimilation analysis
+✓ Data isolation between independent game sessions
+
+===============================================================================
+TECHNICAL DETAILS
+===============================================================================
+
+- Built with: React Native + Expo (cross-platform web/mobile)
+- Database: Supabase (PostgreSQL + real-time subscriptions)
+- Deployed on: Vercel (free hosting)
+- License: MIT (open source)
+
+===============================================================================
+RESEARCH PAPER
+===============================================================================
+
+For full methodology and research context, please see:
+"Behavioral Assimilation in Social Preferences: Evidence from a Multi-Round 
+Ultimatum Game with Immigrant Populations" by Lee, Sadik, Gelrud, Lu, and 
+Martinez (2025) - included in the repository as "Econ 4310 Final Paper.pdf"
+
+===============================================================================
+REPLICATION
+===============================================================================
+
+Anyone can replicate this study or create their own version by following the 
+step-by-step instructions in SETUP_GUIDE.md in the GitHub repository. No 
+programming experience required - the guide covers:
+- Setting up the development environment
+- Creating a Supabase database
+- Running the app locally
+- Deploying to the web
+
+===============================================================================
+TEAM
+===============================================================================
+
+Michael Lee
+Ola Sadik
+Jacob Gelrud
+Yucheng Lu
+Antonio Martinez
+
+Washington University in St. Louis - ECON 4310
+
+===============================================================================
+QUESTIONS OR ISSUES?
+===============================================================================
+
+Please open an issue on GitHub or contact the team directly.
+
+Thank you for reviewing our work!
+===============================================================================
+
