@@ -17,9 +17,7 @@ export default function DemographicScreen({ route, navigation }) {
     dateOfBirth: '',
     birthCountry: '',
     currentCountry: 'United States',
-    yearsInUS: '',
     generationStatus: '',
-    ageArrived: '',
   });
   const [countries, setCountries] = useState([
     { country: '', startDate: '', endDate: '' }
@@ -75,9 +73,7 @@ export default function DemographicScreen({ route, navigation }) {
             date_of_birth: demographics.dateOfBirth,
             birth_country: demographics.birthCountry,
             current_country: demographics.currentCountry,
-            years_in_us: demographics.yearsInUS ? parseInt(demographics.yearsInUS) : null,
             generation_status: demographics.generationStatus || null,
-            age_arrived_us: demographics.ageArrived ? parseInt(demographics.ageArrived) : null,
             countries_lived: JSON.stringify(countries.filter(c => c.country)), // Only save filled countries
             created_at: new Date().toISOString(),
           },
@@ -137,28 +133,6 @@ export default function DemographicScreen({ route, navigation }) {
               value={demographics.currentCountry}
               onChangeText={(text) => setDemographics({ ...demographics, currentCountry: text })}
               placeholder="United States"
-            />
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Years Lived in the US (Optional)</Text>
-            <TextInput
-              style={styles.input}
-              value={demographics.yearsInUS}
-              onChangeText={(text) => setDemographics({ ...demographics, yearsInUS: text })}
-              placeholder="Enter number of years"
-              keyboardType="numeric"
-            />
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Age When You Arrived in the US (Optional)</Text>
-            <TextInput
-              style={styles.input}
-              value={demographics.ageArrived}
-              onChangeText={(text) => setDemographics({ ...demographics, ageArrived: text })}
-              placeholder="Enter age"
-              keyboardType="numeric"
             />
           </View>
 

@@ -73,9 +73,7 @@ CREATE TABLE demographics (
   date_of_birth TEXT,
   birth_country TEXT,
   current_country TEXT,
-  years_in_us INTEGER,
   generation_status TEXT,
-  age_arrived_us INTEGER,
   countries_lived JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

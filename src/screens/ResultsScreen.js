@@ -54,12 +54,6 @@ export default function ResultsScreen({ route }) {
           {demographics.currentCountry && (
             <Text style={styles.infoText}>Current Country: {demographics.currentCountry}</Text>
           )}
-          {demographics.yearsInUS && (
-            <Text style={styles.infoText}>Years in US: {demographics.yearsInUS}</Text>
-          )}
-          {demographics.ageArrived && (
-            <Text style={styles.infoText}>Age Arrived in US: {demographics.ageArrived}</Text>
-          )}
           {demographics.generationStatus && (
             <Text style={styles.infoText}>Generation: {demographics.generationStatus}</Text>
           )}
