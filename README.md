@@ -167,6 +167,18 @@ The current RLS policies allow all operations for development. For production:
 - **Database Errors**: Ensure all tables were created correctly using schema.sql
 - **Role Assignment Issues**: Check player_roles table for correct assignments
 
+## Citation
+
+If you use this software in your research, please cite:
+
+```
+Lee, M., Sadik, O., Gelrud, J., Lu, Y., & Martinez, A. (2024). 
+Behavioral Assimilation in Social Preferences: Evidence from a Multi-Round Ultimatum Game with Immigrant Populations.
+WashU ECON 4310.
+```
+
 ## License
 
-This project is for educational/research purposes.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+This software was developed for educational and research purposes as part of ECON 4310 at Washington University in St. Louis.
