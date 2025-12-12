@@ -180,7 +180,7 @@ The current RLS policies allow all operations for development. For production:
 If you use this software in your research, please cite:
 
 ```
-Lee, M., Sadik, O., Gelrud, J., Lu, Y., & Martinez, A. (2024). 
+Lee, M., Sadik, O., Gelrud, J., Lu, Y., & Martinez, A. (2025). 
 Behavioral Assimilation in Social Preferences: Evidence from a Multi-Round Ultimatum Game with Immigrant Populations.
 WashU ECON 4310.
 ```
