@@ -54,8 +54,14 @@ export default function ResultsScreen({ route }) {
           {demographics.currentCountry && (
             <Text style={styles.infoText}>Current Country: {demographics.currentCountry}</Text>
           )}
-          {demographics.generationStatus && (
-            <Text style={styles.infoText}>Generation: {demographics.generationStatus}</Text>
+          {demographics.generationStatus !== undefined && demographics.generationStatus !== null && (
+            <Text style={styles.infoText}>
+              Generation Status: {demographics.generationStatus}
+              {demographics.generationStatus === 0 && ' (You came to the US)'}
+              {demographics.generationStatus === 1 && ' (Your parents came to the US)'}
+              {demographics.generationStatus === 2 && ' (Your grandparents came to the US)'}
+              {demographics.generationStatus >= 3 && ' (Your great-grandparents or earlier)'}
+            </Text>
           )}
         </View>
 

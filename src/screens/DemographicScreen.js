@@ -8,7 +8,6 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { supabase } from '../config/supabase';
 
 export default function DemographicScreen({ route, navigation }) {
@@ -49,8 +48,14 @@ export default function DemographicScreen({ route, navigation }) {
     }
 
     // Validate generation status
-    if (!demographics.generationStatus) {
-      Alert.alert('Error', 'Please select your generation status');
+    if (!demographics.generationStatus || demographics.generationStatus.trim() === '') {
+      Alert.alert('Error', 'Please enter your generation status (0, 1, 2, 3, etc.)');
+      return;
+    }
+    
+    const genStatus = parseInt(demographics.generationStatus);
+    if (isNaN(genStatus) || genStatus < 0) {
+      Alert.alert('Error', 'Generation status must be a number 0 or greater');
       return;
     }
 
@@ -73,7 +78,7 @@ export default function DemographicScreen({ route, navigation }) {
             date_of_birth: demographics.dateOfBirth,
             birth_country: demographics.birthCountry,
             current_country: demographics.currentCountry,
-            generation_status: demographics.generationStatus || null,
+            generation_status: parseInt(demographics.generationStatus),
             countries_lived: JSON.stringify(countries.filter(c => c.country)), // Only save filled countries
             created_at: new Date().toISOString(),
           },
@@ -138,65 +143,74 @@ export default function DemographicScreen({ route, navigation }) {
 
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Generation Status *</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={demographics.generationStatus}
-                onValueChange={(value) => setDemographics({ ...demographics, generationStatus: value })}
-                style={styles.picker}
-              >
-                <Picker.Item label="Select generation status" value="" />
-                <Picker.Item label="First generation (I immigrated)" value="first" />
-                <Picker.Item label="Second generation (My parents immigrated)" value="second" />
-                <Picker.Item label="Third+ generation (My grandparents or earlier)" value="third-plus" />
-                <Picker.Item label="Born in the United States" value="us-born" />
-              </Picker>
-            </View>
+            <Text style={styles.sublabel}>
+              Enter a number where:{'\n'}
+              • 0 = You came to the US (First generation){'\n'}
+              • 1 = Your parents came to the US (Second generation){'\n'}
+              • 2 = Your grandparents came to the US (Third generation){'\n'}
+              • 3+ = Your great-grandparents or earlier (Fourth+ generation)
+            </Text>
+            <TextInput
+              style={styles.input}
+              value={demographics.generationStatus}
+              onChangeText={(text) => setDemographics({ ...demographics, generationStatus: text })}
+              placeholder="Enter 0, 1, 2, 3, etc."
+              keyboardType="numeric"
+            />
           </View>
 
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Countries You've Lived In *</Text>
             <Text style={styles.sublabel}>List all countries where you have lived with dates (at least one required)</Text>
             
-            <View style={styles.tableContainer}>
-              <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, styles.countryColumn]}>Country</Text>
-                <Text style={[styles.tableHeaderText, styles.dateColumn]}>Start Date</Text>
-                <Text style={[styles.tableHeaderText, styles.dateColumn]}>End Date</Text>
-                <Text style={[styles.tableHeaderText, styles.actionColumn]}></Text>
-              </View>
-
+            <View style={styles.countriesContainer}>
               {countries.map((country, index) => (
-                <View key={index} style={styles.tableRow}>
+                <View key={index} style={styles.countryCard}>
+                  <View style={styles.countryCardHeader}>
+                    <Text style={styles.countryCardTitle}>Country {index + 1}</Text>
+                    <TouchableOpacity
+                      style={[styles.removeButton, countries.length === 1 && styles.removeButtonDisabled]}
+                      onPress={() => removeCountryRow(index)}
+                      disabled={countries.length === 1}
+                    >
+                      <Text style={[styles.removeButtonText, countries.length === 1 && styles.disabledText]}>✕</Text>
+                    </TouchableOpacity>
+                  </View>
+                  
+                  <Text style={styles.fieldLabel}>Country Name</Text>
                   <TextInput
-                    style={[styles.tableInput, styles.countryColumn]}
+                    style={styles.countryInput}
                     value={country.country}
                     onChangeText={(text) => updateCountry(index, 'country', text)}
-                    placeholder="Country"
+                    placeholder="e.g., United States"
                   />
-                  <TextInput
-                    style={[styles.tableInput, styles.dateColumn]}
-                    value={country.startDate}
-                    onChangeText={(text) => updateCountry(index, 'startDate', text)}
-                    placeholder="MM/YYYY"
-                  />
-                  <TextInput
-                    style={[styles.tableInput, styles.dateColumn]}
-                    value={country.endDate}
-                    onChangeText={(text) => updateCountry(index, 'endDate', text)}
-                    placeholder="MM/YYYY or Present"
-                  />
-                  <TouchableOpacity
-                    style={styles.removeButton}
-                    onPress={() => removeCountryRow(index)}
-                    disabled={countries.length === 1}
-                  >
-                    <Text style={[styles.removeButtonText, countries.length === 1 && styles.disabledText]}>✕</Text>
-                  </TouchableOpacity>
+                  
+                  <View style={styles.dateRow}>
+                    <View style={styles.dateField}>
+                      <Text style={styles.fieldLabel}>Start Date</Text>
+                      <TextInput
+                        style={styles.countryInput}
+                        value={country.startDate}
+                        onChangeText={(text) => updateCountry(index, 'startDate', text)}
+                        placeholder="MM/YYYY"
+                      />
+                    </View>
+                    
+                    <View style={styles.dateField}>
+                      <Text style={styles.fieldLabel}>End Date</Text>
+                      <TextInput
+                        style={styles.countryInput}
+                        value={country.endDate}
+                        onChangeText={(text) => updateCountry(index, 'endDate', text)}
+                        placeholder="Present"
+                      />
+                    </View>
+                  </View>
                 </View>
               ))}
 
               <TouchableOpacity style={styles.addButton} onPress={addCountryRow}>
-                <Text style={styles.addButtonText}>+ Add Country</Text>
+                <Text style={styles.addButtonText}>+ Add Another Country</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -257,54 +271,65 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontStyle: 'italic',
   },
-  tableContainer: {
+  countriesContainer: {
     marginTop: 10,
   },
-  tableHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    borderRadius: 4,
-    marginBottom: 5,
+  countryCard: {
+    backgroundColor: '#f9f9f9',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
-  tableHeaderText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  tableRow: {
+  countryCardHeader: {
     flexDirection: 'row',
-    marginBottom: 10,
+    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 12,
   },
-  tableInput: {
+  countryCardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  fieldLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 5,
+    marginTop: 8,
+  },
+  countryInput: {
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 4,
+    borderRadius: 6,
     padding: 10,
-    fontSize: 14,
+    fontSize: 15,
     backgroundColor: '#fff',
-    marginRight: 5,
+    marginBottom: 8,
   },
-  countryColumn: {
-    flex: 3,
+  dateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
   },
-  dateColumn: {
-    flex: 2,
-  },
-  actionColumn: {
-    width: 40,
+  dateField: {
+    flex: 1,
   },
   removeButton: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffebee',
-    borderRadius: 4,
+    borderRadius: 18,
+  },
+  removeButtonDisabled: {
+    backgroundColor: '#f5f5f5',
   },
   removeButtonText: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#f44336',
     fontWeight: 'bold',
   },
@@ -313,17 +338,17 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: '#e3f2fd',
-    padding: 12,
-    borderRadius: 4,
+    padding: 14,
+    borderRadius: 8,
     alignItems: 'center',
-    marginTop: 10,
-    borderWidth: 1,
+    marginTop: 5,
+    borderWidth: 2,
     borderColor: '#2196f3',
     borderStyle: 'dashed',
   },
   addButtonText: {
     color: '#2196f3',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
   },
   input: {
@@ -333,15 +358,6 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     backgroundColor: '#fff',
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  picker: {
-    height: 50,
   },
   submitButton: {
     backgroundColor: '#6200ee',
