@@ -2,6 +2,14 @@
 
 A React Native application for conducting multiplayer Ultimatum Game experiments with 10 rounds and demographic data collection, integrated with Supabase.
 
+## 🚀 Quick Start
+
+**Want to create your own version?** → [**SETUP_GUIDE.md**](SETUP_GUIDE.md) 
+*Complete step-by-step instructions for anyone to set up their own Ultimatum Game app (no coding experience required!)*
+
+**Need deployment help?** → [**DEPLOYMENT.md**](DEPLOYMENT.md)
+*Instructions for publishing to GitHub and deploying to Vercel*
+
 ## Features
 
 - **Multiplayer Lobbies**: Multiple players can join a game lobby
